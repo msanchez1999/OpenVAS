@@ -1,5 +1,6 @@
-
 # OpenVAS
+
+*__Marc Sánchez Velaz, isx48090422̣__*
 
 ## Índex
 <ul>
@@ -8,11 +9,20 @@
   <li>3. Preparació entorn virtual</li>
   <li>4. Set up OpenVAS</li>
   <li>5. Algunes funcions del Web UI</li>
-  <li>6. Possibles errors durant la instal·lació</li>
+  <li>6. Possibles solucions a errors pre i post instal·lació</li>
   <li>7. Conclusió</li>
 </ul>
 
 ## 1. Què és OpenVAS?
+OpenVAS o Open Vulnerability Assessment System és un framework de Pen-testing, que disposa d'eines per a escanejar i testejar sistemes per a buscar vulnerabilitats tant de baix risc per a usuaris com de més greus en equips i dispositius en xarxa.
+
+Compta amb una interficie gràfica per a què el procès d'anàlisis sigui més útil visualment i fàcil d'interpretar per a l'usuari.
+
+OpenVAS utilitza una base de dades que conté una col·lecció d'exploits i vulnerabilitats conegudes, que arriba fins als 50.000 tests.
+
+Té diverses funcions: proves autenticades, proves no autenticades, protocols industrials i de Internet d'alt i baix nivell, etc.
+
+Les característiques principals són: extensa i definida documentació, posibilidad de funcionar tant en linia de comandes com per interficie gràfica, comunitat que ofereix diversitat de tutorials y ajuda, etc.
 
 ## 2. Selecció de distribució linux
 A l'hora de fer una instal·lació, cal decidir quin sistema operatiu/distribució és el més adient per diferents motius, ja sigui per:
@@ -76,38 +86,38 @@ Un cop finalitzat el set up, cal estar atents, ja que a les ultimes línies d'ex
 
 Comprovació de que el set up ha funcionat bé "aparentment":
 ~~~
-gvm-check-setup
+# gvm-check-setup
 ~~~
 D'aqui en endavant es interesant realitzar la següent comanda, pero tenir imprès per stdout els logs del servei al moment:
 ~~~
-tail -f /var/log/gvm/gvmd.log
+# tail -f /var/log/gvm/gvmd.log
 ~~~
 Configuració per defecte, per a rebre les dades tipus GVMD_DATA:
 ~~~
-greenbone-feed-sync --type GVMD_DATA
+# greenbone-feed-sync --type GVMD_DATA
 ~~~
 Configuració per defecte, per rebre les dades tipus SCAP:
 ~~~
-greenbone-feed-sync --type SCAP
+# greenbone-feed-sync --type SCAP
 ~~~
 Configuració per defect, per rebre les dades tipus CERT:
 ~~~
-greenbone-feed-sync --type CERT
+# greenbone-feed-sync --type CERT
 ~~~
 Podem comprovar que estem rebent aquestes dades amb la comanda:
 ~~~
-htop
+# htop
 ~~~
 Arrencar OpenVAS service:
 ~~~
-gvm-start
+# gvm-start
 ~~~
 Per defecte, sens obrirà el navegador carregant la Web UI d'OpenVAS amb la url http://127.0.0.1:9392
 Segurament no podem accedir, es normal, el servei triga molta estona en estar llest.
 En tot cas, podem rebotar el servei.
 ~~~
-gvm-stop
-gvm-start
+# gvm-stop
+# gvm-start
 ~~~
 Un cop dins fem login amb les credencials de l'usuari admin que tenim guardades.
 
@@ -140,3 +150,27 @@ Cliquem save i tard o d'hora comensarà l'escaneig. Com tot el que està relacio
 <br />
 ### · Veure resultats
 Dins d'aquesta mateixa pestanya, podem veure els reports, results i vulnerabilities dels escanejos realitzats.
+
+Cal recalcar que moltes d'aquestes coses es poden fer a través de la línia de comandes, per a més info:
+~~~
+# man gvmd
+~~~
+
+## 6. Possibles solucions a errors pre i post instal·lació
+Durant i després de la instal·lació, podrem trobar diverses falles.
+Per a errors generals de sincronització de dades o funcionament, per regla general es solucionen fent, o bé, un restart del servei (gvm-stop, gvm-start) o tornar a realitzar les ordres (greenbone-feed-sync).
+També podem fer algun upgrade del paquet gvm.
+En el meu cas personal, un error em portava maldecaps, perque no em permetia fer escanejos era el següent: 
+~~~
+"Failed to find config 'daba56c8-73ec-11df-a475-002264764cea'"
+~~~
+ Després de moltes cerques, vaig veure que la gran majoria d'usuaris tenien el mateix error.
+ En el meu cas la solució que em va arreglar el problema va ser les següents ordres:
+ ~~~
+sudo runuser -u _gvm -- greenbone-nvt-sync --rsync
+sudo runuser -u _gvm -- greenbone-scapdata-sync
+sudo runuser -u _gvm -- greenbone-certdata-sync
+ ~~~
+ Cal rebotar la màquina i desde el web UI, a la pestanya de Administration/feed status, esperar fins que tots els feeds hagin acabat l'update, procès el qual em va trigar 1 hora aprox.
+## 7. Conclusió
+Penso que OpenVAS és una poderosa eina que porta el rastreig de ciberseguretat a l'abast de qualsevol usuari. A la pràctica es pot utilitzar per monitoritzar dispositius dins de la nostra xarxa i llocs webs a servidors remots.
