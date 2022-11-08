@@ -13,6 +13,8 @@ jobs:
         run: ls -ltha / 
       - name: hostname del docker-ishimura
         run: hostname
+      - name: delete python folder
+        run: rm -rf actions-runner/_work/_tool/Python
       - uses: actions/checkout@v2
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
