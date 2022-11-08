@@ -5,9 +5,9 @@ on:
     branches: [main]
 
 jobs:
-  push:
-   runs-on: docker-ishimura
-
-  steps:
-    -name: ls container docker-ishimura
-    run: ls -ltha /
+  list:
+    runs-on: docker-ishimura
+    steps:
+      - uses: actions/checkout@v3
+      - name: ls container docker-ishimura
+      run: ls -ltha /
