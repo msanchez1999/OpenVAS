@@ -10,4 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: ls container docker-ishimura
-        run: ls -ltha /
+        run: ls -ltha / 
+      - name: hostname del docker-ishimura
+        run: hostname
