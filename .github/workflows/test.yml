@@ -1,0 +1,13 @@
+name: test Marc
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  push:
+   runs-on: docker-ishimura
+
+  steps:
+    -name: ls container docker-ishimura
+    run: ls -ltha /
