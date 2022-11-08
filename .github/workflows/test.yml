@@ -13,9 +13,3 @@ jobs:
         run: ls -ltha / 
       - name: hostname del docker-ishimura
         run: hostname
-      - name: install ip command 
-        run: apt install -y iproute2
-      - name: ver IP local maqui8na github
-        run: ip a
-      - name: eliminar iproute2
-        run: apt remove -y iproute2
